@@ -59,9 +59,6 @@
       border-bottom: 1px solid #555;
       box-shadow: 0px 0px 4px 2px #555;
     }
-    .bleu {
-      font-family: Courier, monospace;
-    }
     .logprob {
       font-family: Courier, monospace;
     }
@@ -81,7 +78,6 @@
     function writeHeader() {
       html = '<h2>Showing results for ' + db.checkpoint_params.dataset + ' on ' + db.imgblobs.length + ' images</h2>';
       html += '<br>Eval params were: ' + JSON.stringify(db.params);
-      html += '<br>Final average BLEU was: ' + '(' + db.final_result.bleu[0].toFixed(2) + ',' + db.final_result.bleu[1].toFixed(2) + ',' + db.final_result.bleu[2].toFixed(2) + ')'
       html += '<br>Final average perplexity of ground truth words: ' + db.gtppl.toFixed(2);
       $("#blobsheader").html(html);
     }
@@ -116,14 +112,9 @@
         var hscale = desired_height / height;
         var nwidth = width * hscale; 
 
-        var sdiv = div.append("div").attr('class', 'svgdiv');
-        var svg = sdiv.append("svg");
-
         // okay now lets render the image
-        var svg_img = svg.append("image").attr("x", 0).attr("y", 0);
-        svg_img.attr('height', desired_height).attr('width', nwidth).attr('xlink:href', fname);
-        svg.attr('height', desired_height);
-        svg.attr('width', '100%');
+        var sdiv = div.append("div").attr('class', 'svgdiv');
+        sdiv.append('img').attr('src', fname).attr('height', desired_height).attr('width', nwidth);
 
         // add human predictions
         if('references' in ib && false) {
@@ -141,7 +132,6 @@
 
     function insertAnnot(annot, dnew) {
       dnew.append('div').attr('class', 'atxt').text(annot.text);
-      dnew.append('div').attr('class', 'bleu').text('BLEU: (' + annot.bleu[0].toFixed(2) + ',' + annot.bleu[1].toFixed(2) + ',' + annot.bleu[2].toFixed(2) + ')');
       dnew.append('div').attr('class', 'logprob').text('logprob: ' + annot.logprob.toFixed(2));
     }
 
@@ -171,7 +161,7 @@
   </head>
   <body onload="start()">
     <div id="header">
-        <h1>Sentence Generation Results</h1>
+        <h1><a href="https://github.com/karpathy/neuraltalk">NeuralTalk</a> Sentence Generation Results</h1>
         <div id="blobsheader"></div>
       </div>
     <div id="wrap">

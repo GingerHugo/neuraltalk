@@ -9,10 +9,10 @@ The pipeline for the project looks as follows:
 
 - The **input** is a dataset of images and 5 sentence descriptions that were collected with Amazon Mechanical Turk. In particular, this code base is set up for [Flickr8K](http://nlp.cs.illinois.edu/HockenmaierGroup/Framing_Image_Description/KCCA.html), [Flickr30K](http://shannon.cs.illinois.edu/DenotationGraph/), and [MSCOCO](http://mscoco.org/) datasets. 
 - In the **training stage**, the images are fed as input to RNN and the RNN is asked to predict the words of the sentence, conditioned on the current word and previous context as mediated by the hidden layers of the neural network. In this stage, the parameters of the networks are trained with backpropagation.
-- In the **prediction stage**, a witheld set of images is passed to RNN and the RNN generates the sentence one word at a time. The results are evaluated with **BLEU score** and with **ranking experiments** (coming soon). The code also includes utilities for visualizing the results in HTML.
+- In the **prediction stage**, a witheld set of images is passed to RNN and the RNN generates the sentence one word at a time. The results are evaluated with **BLEU score**. The code also includes utilities for visualizing the results in HTML.
 
 ## Dependencies
-**Python 2.7**, modern version of **numpy/scipy**, **nltk** (if you want to do BLEU score evaluation), **argparse** module. Most of these are okay to install with **pip**. 
+**Python 2.7**, modern version of **numpy/scipy**, **perl** (if you want to do BLEU score evaluation), **argparse** module. Most of these are okay to install with **pip**. 
 
 I only tested this code with Ubuntu 12.04, but I tried to make it as generic as possible (e.g. use of **os** module for file system interactions etc. So it might work on Windows and Mac relatively easily.)
 
@@ -32,6 +32,12 @@ Lastly, note that this is currently research code, so a lot of the documentation
 ## Pretrained model
 
 Some pretrained models can be found in the [NeuralTalk Model Zoo](http://cs.stanford.edu/people/karpathy/neuraltalk/). The slightly hairy part is that if you wish to apply these models to some arbitrary new image (one not from Flickr8k/30k/COCO) you have to first extract the CNN features. I use the 16-layer [VGG network](http://www.robots.ox.ac.uk/~vgg/research/very_deep/) from Simonyan and Zisserman, because the model is beautiful, powerful and available with [Caffe](http://caffe.berkeleyvision.org/). There is opportunity for putting the preprocessing and inference into a single nice function that uses the Python wrapper to get the features and then runs the pretrained sentence model. I might add this in the future.
+
+## Using the model to predict on new images
+
+The code allows you to easily predict and visualize results of running the model on COCO/Flickr8K/Flick30K images. If you want to run the code on arbitrary image (e.g. on your file system), things get a little more complicated because we need to first need to pipe your image through the VGG CNN to get the 4096-D activations on top. 
+
+Have a look inside the folder `example_images` for instructions on how to do this. Currently, the code for extracting the raw features from each image is in Matlab, so you will need it installed on your system. Caffe also has a wrapper for Python, but I wasn't yet able to use the Python wrapper to exactly reproduce the features I get from Matlab. The `example_images` will walk you through the process, and you will eventually use `predict_on_images.py` to run the prediction.
 
 ## Using your own data
 

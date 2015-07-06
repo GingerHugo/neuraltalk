@@ -10,7 +10,7 @@ class Solver:
   """
   def __init__(self):
     self.step_cache_ = {} # might need this
-    self.step_cache_2 = {} # might need this
+    self.step_cache2_ = {} # might need this
 
   def step(self, batch, model, cost_function, **kwargs):
     """ 
